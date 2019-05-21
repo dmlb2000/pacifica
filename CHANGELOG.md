@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Notifications service v0.4.1 was added by [@markborkum](https://github.com/markborkum)
 - Dispatcher library v0.2.3 was added by [@markborkum](https://github.com/markborkum)
 
+## [1.0.0] - 2019-06-20
+### Added
+- Add Pacifica Metadata Management tool by [@dmlb2000](https://github.com/dmlb2000)
+
+### Changed
+- Policy service v0.6.4 by [@dmlb2000](https://github.com/dmlb2000)
+- Pacifica 1.0 Examples Jupyter Notebook - Added sections about elasticsearch and data release by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.99.0] - 2019-05-20
 ### Changed
 - ArchiveInterface service v0.2.1 by [@dmlb2000](https://github.com/dmlb2000)

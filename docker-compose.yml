@@ -15,6 +15,15 @@ services:
     image: rabbitmq:3.7
   notifyamqp:
     image: rabbitmq:3.7
+  jupyteramqp:
+    image: rabbitmq:3.7
+
+  jupyterdb:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: jupyter
+      POSTGRES_USER: jupyter
+      POSTGRES_PASSWORD: jupyter
 
   cartdb:
     image: postgres:9.6
@@ -135,7 +144,7 @@ services:
       PEEWEE_DATABASE_URL: postgres://pacifica:pacifica@metadatadb/pacifica_metadata
 
   policyserver:
-    image: pacifica/policy:v0.6.1
+    image: pacifica/policy:v0.6.5
     links:
       - metadataserver
       - elasticdb
@@ -219,19 +228,32 @@ services:
       - notifydb
       - notifyamqp
       - policyserver
+      - jupyter
     environment:
       PEEWEE_DATABASE_URL: postgres://notify:notify@notifydb/pacifica_notify
       BROKER_URL: pyamqp://guest:guest@notifyamqp:5672//
       POLICY_URL: http://policyserver:8181
 
+  mgmt:
+    build:
+      context: docker/mgmt
+    links:
+      - metadataserver
+    ports:
+      - 8889:80
+
   jupyter:
     image: jupyter/scipy-notebook
+    links:
+      - jupyterdb
+      - jupyteramqp
     ports:
       - 8888:8888
     volumes:
       - jupyterdata:/home/jovyan
+
   jupytervolume:
     build:
-      context: jupyter
+      context: docker/jupyter
     volumes:
       - jupyterdata:/srv
