@@ -140,7 +140,8 @@ services:
     ports:
       - 8121:8121
     environment:
-      NOTIFICATIONS_URL: http://notifyfrontend:8070/receive
+      NOTIFICATIONS_ORM_SOURCE: http://metadataserver:8121/{object_name}
+      NOTIFICATIONS_URL: http://notifyrouter:8080/
       PEEWEE_DATABASE_URL: postgres://pacifica:pacifica@metadatadb/pacifica_metadata
 
   policyserver:
@@ -233,6 +234,27 @@ services:
       PEEWEE_DATABASE_URL: postgres://notify:notify@notifydb/pacifica_notify
       BROKER_URL: pyamqp://guest:guest@notifyamqp:5672//
       POLICY_URL: http://policyserver:8181
+
+  phpamqp:
+    image: rabbitmq:3.7
+    ports:
+      - 15672:15672
+
+  phpconsumer:
+    build:
+      context: docker/php
+    links:
+      - phpamqp
+    environment:
+      HOST: phpamqp
+
+  notifyrouter:
+    build:
+      context: docker/notify_router
+    links:
+      - phpamqp
+    environment:
+      HOST: phpamqp
 
   mgmt:
     build:
